@@ -27,12 +27,12 @@ namespace ASP_FinalExam_Net6.Tests
             using (var testDb = new ApplicationDbContext(this.GetTestDbOpts()))
             {
                 var testCtrl = new DepartmentsController(testDb);
-                var fakeJobs = MakeFakeDepartments(3);
+                var fakeDepartments = MakeFakeDepartments(3);
 
-                // Adding Jobs
-                foreach (var jobs in fakeJobs)
+                // Adding Departments
+                foreach (var department in fakeDepartments)
                 {
-                    var res = await testCtrl.Create(jobs);
+                    var res = await testCtrl.Create(department);
                     var resVr = Assert.IsType<RedirectToActionResult>(res);
                     Assert.Equal("Index", resVr.ActionName);
                 }
@@ -40,16 +40,16 @@ namespace ASP_FinalExam_Net6.Tests
                 // Testing Saved Values
                 var idxRes = await testCtrl.Index();
                 var idxResVr = Assert.IsType<ViewResult>(idxRes);
-                var returnedJobs = Assert.IsAssignableFrom<IEnumerable<Department>>(idxResVr.ViewData.Model);
-                foreach (var job in fakeJobs)
+                var returnedDepartments = Assert.IsAssignableFrom<IEnumerable<Department>>(idxResVr.ViewData.Model);
+                foreach (var department in fakeDepartments)
                 {
-                    Assert.Contains(job, returnedJobs);
+                    Assert.Contains(department, returnedDepartments);
                 }
 
-                // Removing All Existing Jobs
-                foreach (var job in returnedJobs)
+                // Removing All Existing Departments
+                foreach (var department in returnedDepartments)
                 {
-                    var res = await testCtrl.DeleteConfirmed(job.Id);
+                    var res = await testCtrl.DeleteConfirmed(department.Id);
                     var resVr = Assert.IsType<RedirectToActionResult>(res);
                     Assert.Equal("Index", resVr.ActionName);
                 }
@@ -59,22 +59,22 @@ namespace ASP_FinalExam_Net6.Tests
         // Create the DB Context to use (note this should be a test database)
         private DbContextOptions<ApplicationDbContext> GetTestDbOpts()
         {
-            var opts = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(databaseName: "TestJobPedia").Options;
+            var opts = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(databaseName: "FinalExamDB").Options;
             return opts;
         }
 
         private List<Department> MakeFakeDepartments(int i)
         {
-            var jobs = new List<Department>();
+            var departments = new List<Department>();
             for (int j = 0; j < i; j++)
             {
-                jobs.Add(new Department
+                departments.Add(new Department
                 {
                     Name = $"test{j}",
                     EmployeeCount = j
                 });
             }
-            return jobs;
+            return departments;
         }
     }
 }
