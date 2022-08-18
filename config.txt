@@ -1,0 +1,5 @@
+[user]
+    name = InderjitSingh2002
+    email = 200477140@student.georgianc.on.ca
+
+InderjitSingh2002/Inderjit-Singh-COMP-2084-Final-Exam
